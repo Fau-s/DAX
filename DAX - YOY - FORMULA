@@ -1,27 +1,26 @@
-// Define the current date
+YOY Measure :=
 VAR CurrentDate = TODAY()
-
-// Calculate the number of days remaining
 VAR DaysRemaining = MAX(Original[deadline date]) - CurrentDate
-
-// Return the calculated value based on conditions
+VAR IsConditionMet = DaysRemaining + 6 >= [max days to deadline]
+VAR ConditionValue =
+    IF(
+        IsConditionMet,
+        CALCULATE(
+            [Completed FY24 table],
+            FILTER(
+                ALLSELECTED(Original[Days to deadline]),
+                ISONORAFTER(
+                    Original[Days to deadline],
+                    MAX(Original[Days to deadline]),
+                    DESC
+                )
+            )
+        ),
+        BLANK()
+    )
 RETURN
 IF(
-    DaysRemaining + 6 < [max days to deadline],
-    BLANK(),
-    CALCULATE(
-        [Completed FY24 table],
-        FILTER(
-            ALLSELECTED(Original[Days to deadline]),
-            ISONORAFTER(
-                Original[Days to deadline],
-                MAX(Original[Days to deadline]),
-                DESC
-            )
-        )
-    )
+    NOT(ISBLANK(ConditionValue)),
+    DIVIDE([FY24], [total population FY24], BLANK()),
+    BLANK()
 )
-
-// Year-over-Year (YOY) calculation
-RETURN
-DIVIDE([FY24], [total population FY24], BLANK()) 
