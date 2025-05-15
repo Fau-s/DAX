@@ -1,15 +1,27 @@
-FY24:
+// Define the current date
+VAR CurrentDate = TODAY()
 
-VAR CurrentDate = today () 
+// Calculate the number of days remaining
+VAR DaysRemaining = MAX(Original[deadline date]) - CurrentDate
 
-VAR DaysRemaining = MAX(Original[deadline date]) - current date 
+// Return the calculated value based on conditions
+RETURN
+IF(
+    DaysRemaining + 6 < [max days to deadline],
+    BLANK(),
+    CALCULATE(
+        [Completed FY24 table],
+        FILTER(
+            ALLSELECTED(Original[Days to deadline]),
+            ISONORAFTER(
+                Original[Days to deadline],
+                MAX(Original[Days to deadline]),
+                DESC
+            )
+        )
+    )
+)
 
-RETURN 
-
-IF( daystemaining + 6 < [max days to deadline], BLANK (), 
-
-CALCULATE( [Completed FY24 table], 
-
-FILTER( ALLSELECTED(ORIGINAL[Days to deadline]), ISONORAFTER(ORIGINAL[Days to deadline], MAX(ORIGINAL[Days to deadline]), DESC) ) )
-
-YOY: [FY24]\[total population FY24]
+// Year-over-Year (YOY) calculation
+RETURN
+DIVIDE([FY24], [total population FY24], BLANK()) 
