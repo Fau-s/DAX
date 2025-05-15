@@ -11,3 +11,5 @@ IF( daystemaining + 6 < [max days to deadline], BLANK (),
 CALCULATE( [Completed FY24 table], 
 
 FILTER( ALLSELECTED(ORIGINAL[Days to deadline]), ISONORAFTER(ORIGINAL[Days to deadline], MAX(ORIGINAL[Days to deadline]), DESC) ) )
+
+YOY: [FY24]\[total population FY24]
